@@ -7,6 +7,8 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei"}
 .top{background:#165DFF;color:#fff;padding:18px;font-size:22px;text-align:center}
+.nav-bar{background:#f0f3f9;padding:12px;display:flex;flex-wrap:wrap;gap:8px;text-align:center;justify-content:center}
+.nav-bar a{padding:10px 14px;background:#165DFF;color:#fff;border-radius:6px;text-decoration:none;font-size:15px}
 .cate{display:flex;flex-wrap:wrap;background:#fff;border-bottom:1px solid #eee}
 .cate button{flex:1;padding:14px;border:none;background:none;font-size:16px;outline:none}
 .cate button.active{color:#165DFF;font-weight:bold;border-bottom:2px solid #165DFF}
@@ -20,7 +22,16 @@ button{cursor:pointer}
 </style>
 </head>
 <body>
+
 <div class="top">数据实战题库（PQ/SQL/Python/Regex）</div>
+
+<!-- 导航按钮：可以跳转到所有页面！-->
+<div class="nav-bar">
+  <a href="index.html">返回登录</a>
+  <a href="admin.html">管理后台</a>
+  <a href="pay.html">会员开通</a>
+  <a href="home.html">刷新题库</a>
+</div>
 
 <div class="cate">
   <button onclick="showType('all')" class="active">全部</button>
