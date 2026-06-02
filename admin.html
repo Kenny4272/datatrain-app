@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>管理后台 - 题库分类管理</title>
+<title>管理后台 - 题库批量导入版</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei"}
 .top{background:#222;color:#fff;padding:16px}
@@ -13,8 +13,11 @@
 .content{padding:20px}
 .block{display:none;margin-top:15px;padding:20px;border:1px solid #ddd;border-radius:8px}
 .active{display:block}
-input,select{width:100%;padding:10px;margin:6px 0;border:1px solid #ddd;border-radius:4px}
-button{background:#165DFF;color:#fff;border:none;padding:10px 16px;border-radius:4px;cursor:pointer}
+input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid #ddd;border-radius:4px}
+button{background:#165DFF;color:#fff;border:none;padding:10px 16px;border-radius:4px;cursor:pointer;margin:3px}
+.del-btn{background:#f53f3f}
+.import-btn{background:#00b42a}
+.item-line{border-bottom:1px solid #eee;padding:8px;margin:4px 0}
 </style>
 </head>
 <body>
@@ -28,35 +31,59 @@ button{background:#165DFF;color:#fff;border:none;padding:10px 16px;border-radius
 </div>
 
 <div class="content">
-  <div id="tab1" class="block">学员管理（可扩展导入Excel）</div>
-  <div id="tab2" class="block">订单管理（会员开通记录）</div>
-  <div id="tab3" class="block">学习报表（统计正确率）</div>
+  <div id="tab1" class="block">学员管理（可扩展Excel批量导入学员）</div>
+  <div id="tab2" class="block">订单管理：全部会员开通订单记录</div>
+  <div id="tab3" class="block">学习报表：做题正确率、会员数据汇总</div>
 
   <div id="tab4" class="block active">
-    <h3>题库配置（支持 PQ/SQL/Python/Regex）</h3><br>
+    <!--单条新增区-->
+    <h3>单题新增（手动录入）</h3>
     <select id="type">
       <option value="PQ">PowerQuery M</option>
       <option value="SQL">SQL</option>
       <option value="Python">Python</option>
       <option value="Regex">正则表达式</option>
     </select>
-
     <input id="q" placeholder="题干">
     <input id="o1" placeholder="选项A">
     <input id="o2" placeholder="选项B">
     <input id="o3" placeholder="选项C">
     <input id="right" placeholder="正确答案下标 0=A,1=B,2=C">
     <input id="ans" placeholder="答案解析">
-    <button onclick="add()">保存题目</button>
+    <button onclick="add()">保存单题</button>
+
+    <hr style="margin:22px 0;">
+    <!--批量一键导入区-->
+    <h3>✅ 百题一键批量导入（粘贴完整JSON数组，一键入库100题）</h3>
+    <textarea id="batchJson" rows="6" placeholder="粘贴全套题库JSON，点击批量导入即可"></textarea>
+    <button class="import-btn" onclick="batchImport()">一键批量导入题库</button>
+
+    <hr style="margin:22px 0;">
+    <h3>全量题库列表（可单条删除冗余题目）</h3>
+    <div id="listBox"></div>
   </div>
 </div>
 
 <script>
+let arr = JSON.parse(localStorage.getItem('que') || '[]');
+//刷新题库列表
+function refreshList(){
+  arr = JSON.parse(localStorage.getItem('que') || '[]');
+  let html='';
+  arr.forEach((item,i)=>{
+    html += `<div class="item-line">
+    <span>[${item.type}]</span> ${item.q.substring(0,40)}...
+    <button class="del-btn" onclick="del(${i})">删除本条</button>
+    </div>`
+  })
+  document.getElementById('listBox').innerHTML = html;
+}
+//切换标签页
 function goto(n){
   document.querySelectorAll('.block').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab'+n).classList.add('active');
 }
-
+//单条新增题目
 function add(){
   let t = document.getElementById('type').value;
   let q = document.getElementById('q').value;
@@ -65,13 +92,33 @@ function add(){
   let o3 = document.getElementById('o3').value;
   let right = Number(document.getElementById('right').value);
   let ans = document.getElementById('ans').value;
-
-  let item = {type:t, q:q, opt:[o1,o2,o3], right:right, ans:ans};
-  let arr = JSON.parse(localStorage.getItem('que') || '[]');
-  arr.push(item);
+  arr.push({type:t, q:q, opt:[o1,o2,o3], right:right, ans:ans});
   localStorage.setItem('que', JSON.stringify(arr));
-  alert('题目保存成功！去刷题页面查看分类');
+  alert('单题添加成功');
+  refreshList();
 }
+//单条删除题目
+function del(idx){
+  arr.splice(idx,1);
+  localStorage.setItem('que',JSON.stringify(arr));
+  refreshList();
+  alert('删除成功，刷题页刷新生效');
+}
+//核心：一键批量导入
+function batchImport(){
+  let jsonStr = document.getElementById('batchJson').value.trim();
+  try{
+    let batchList = JSON.parse(jsonStr);
+    arr = [...arr,...batchList]; //追加到现有题库，不覆盖原有题目
+    localStorage.setItem('que',JSON.stringify(arr));
+    refreshList();
+    alert(`批量导入成功，共新增${batchList.length}道题目！刷新刷题页面查看`);
+    document.getElementById('batchJson').value='';
+  }catch(e){
+    alert('JSON格式错误，检查粘贴内容！'+e.message);
+  }
+}
+refreshList();
 </script>
 </body>
 </html>
