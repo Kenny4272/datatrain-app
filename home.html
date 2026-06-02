@@ -2,102 +2,43 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>数据技能实训全家桶 - 企业版｜帮助中小微企业打通数据链路</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>数据实训平台-学员首页</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:"Microsoft YaHei",sans-serif;background:#f7f8fa;color:#333}
-.header{background:#165DFF;color:white;padding:20px 0;text-align:center}
-.container{max-width:1200px;margin:0 auto;padding:20px}
-.banner{padding:60px 20px;text-align:center;background:white;border-radius:16px;margin-bottom:30px;box-shadow:0 2px 15px rgba(0,0,0,.05)}
-.banner h1{font-size:32px;margin-bottom:16px;color:#165DFF}
-.banner p{font-size:18px;color:#666;max-width:800px;margin:0 auto 20px}
-.btn{display:inline-block;padding:12px 30px;background:#165DFF;color:white;border-radius:8px;text-decoration:none;font-size:16px;margin:5px}
-.btn.gray{background:#666}
-.section{background:white;border-radius:16px;padding:40px;margin-bottom:30px;box-shadow:0 2px 10px rgba(0,0,0,.04)}
-.section h2{font-size:24px;color:#333;margin-bottom:20px;border-left:4px solid #165DFF;padding-left:12px}
-.section p{color:#666;line-height:1.8;margin-bottom:16px}
-.features{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:20px}
-.features .item{padding:24px;border:1px solid #eee;border-radius:12px}
-.features .item h3{margin-bottom:10px;color:#165DFF}
-.features .item p{font-size:14px;color:#666}
-.price{text-align:center;padding:20px 0}
-.footer{text-align:center;padding:30px;color:#999;font-size:14px}
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei"}
+.header{background:#165DFF;color:#fff;padding:24px 18px;font-size:32px;}
+.nav-bar{background:#f0f3f9;padding:18px;display:flex;gap:15px;flex-wrap:wrap;}
+.btn{background:#165DFF;color:#fff;text-decoration:none;padding:12px 20px;border-radius:6px;font-size:17px;}
+.box-wrap{padding:22px;display:grid;gap:16px;}
+.card{border:1px solid #d9e0ec;border-radius:10px;padding:24px;text-decoration:none;color:#222;display:block;}
+.card h3{font-size:24px;margin-bottom:8px;}
+.card p{color:#555;font-size:16px;}
+.bottom{padding:20px;}
 </style>
 </head>
 <body>
-
-<div class="header">
-<h2>数据技能实训全家桶 · 企业版</h2>
-<p>让中小微企业实现数据驱动 · 离线实战 · 安全合规 · 全链路ETL训练</p>
+<div class="header">数据技能实训平台｜学员中心</div>
+<div class="nav-bar">
+    <a href="home.html" class="btn">实训首页</a>
+    <a href="admin.html" class="btn">后台管理</a>
+    <a href="pay.html" class="btn">会员充值开通</a>
 </div>
-
-<div class="container">
-
-<div class="banner">
-<h1>帮助中小微企业打通数据链路</h1>
-<p>用自家脱敏数据离线练习，真正掌握数据清洗 → 查询分析 → 编程处理 → 模式匹配，让管理KPI透明化，决策数据化驱动！</p>
-<div>
-<a class="btn" href="pay.html">立即开通企业版</a>
-<a class="btn gray" href="index.html">进入实训平台</a>
+<div class="box-wrap">
+    <a href="#course" id="course" class="card">
+        <h3>课程练习</h3>
+        <p>M/PowerQuery/SQL/Python题库在线刷题练习</p>
+    </a>
+    <a href="#record" id="record" class="card">
+        <h3>学习记录</h3>
+        <p>查看做题记录、错题汇总、完成进度</p>
+    </a>
+    <a href="#vip" id="vip" class="card">
+        <h3>会员权益</h3>
+        <p>开通会员解锁全量题库与进阶课程</p>
+    </a>
 </div>
+<div class="bottom">
+    <a href="index.html" class="btn">返回登录页</a>
 </div>
-
-<div class="section">
-<h2>平台初心</h2>
-<p>我们打造这款APP的初衷，就是为了帮助中小微企业打通数据链路，实现数据实时抓取和分析，实现公司管理的KPI透明化，决策数据化驱动！</p>
-<p>我们专注打造数据分析师实战练习APP，通过不断模拟解决企业数据分析真实问题，让用户可以用自己公司的真实数据（经脱敏）离线进行全流程ETL练习。</p>
-</div>
-
-<div class="section">
-<h2>核心能力</h2>
-<div class="features">
-<div class="item">
-<h3>✅ 离线本地运行</h3>
-<p>数据不上云，企业脱敏数据本地处理，安全合规</p>
-</div>
-<div class="item">
-<h3>✅ 全流程ETL实战</h3>
-<p>数据清洗 → SQL查询 → Python处理 → 正则匹配全链路训练</p>
-</div>
-<div class="item">
-<h3>✅ 制造业+电商双题库</h3>
-<p>ERP 50题 + GMV 50题，真实业务场景</p>
-</div>
-<div class="item">
-<h3>✅ KPI透明化</h3>
-<p>管理指标可视化，团队能力可衡量</p>
-</div>
-<div class="item">
-<h3>✅ 决策数据化</h3>
-<p>用数据说话，让经营决策更科学</p>
-</div>
-<div class="item">
-<h3>✅ PWA手机APP</h3>
-<p>一键安装到桌面，随时学习，随时训练</p>
-</div>
-</div>
-</div>
-
-<div class="section">
-<h2>适用企业</h2>
-<p>制造业、电商、零售、贸易、服务业等所有希望通过数据提升效率的中小微企业。</p>
-<p>无论你是否有数据团队，无论你是否懂代码，这套平台都能让你的团队快速具备数据能力。</p>
-</div>
-
-<div class="section price">
-<h2>企业版价格</h2>
-<p><strong>企业版：1999 元/年</strong></p>
-<p>包含全部功能 + 全部题库 + 离线APP + 管理后台 + 技术支持</p>
-<br>
-<a class="btn" href="pay.html">立即购买开通</a>
-</div>
-
-</div>
-
-<div class="footer">
-© 2025 数据技能实训全家桶 企业版｜助力中小微企业数字化转型
-</div>
-
 </body>
 </html>
