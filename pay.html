@@ -3,43 +3,61 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>会员充值开通</title>
+<title>会员开通 - 数据实训平台</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei"}
-.top{background:#165DFF;color:#fff;padding:18px;font-size:24px;}
-.nav{padding:15px;background:#f0f3f9;}
-.nav a{background:#165DFF;color:#fff;padding:9px 15px;border-radius:6px;text-decoration:none;margin-right:12px;}
-.content{padding:22px}
-.vip-card{border:1px solid #ddd;padding:20px;border-radius:8px;margin-bottom:15px;max-width:400px}
-button{padding:9px 18px;background:#165DFF;color:#fff;border:none;border-radius:6px;cursor:pointer;}
+.top{background:#165DFF;color:#fff;padding:18px;font-size:22px;text-align:center}
+.nav-bar{background:#f0f3f9;padding:12px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.nav-bar a{padding:10px 14px;background:#165DFF;color:#fff;border-radius:6px;text-decoration:none;font-size:15px}
+.content{padding:20px;max-width:500px;margin:0 auto}
+.card{background:#fff;border-radius:12px;padding:24px;margin-bottom:16px;box-shadow:0 2px 8px #ddd}
+.card h3{font-size:20px;margin-bottom:8px}
+.price{font-size:24px;color:#ff3c00;font-weight:bold;margin:10px 0}
+button{width:100%;padding:14px;background:#165DFF;color:#fff;border:none;border-radius:8px;font-size:16px;margin-top:10px}
+.info{color:#666;margin-top:10px;line-height:1.5}
 </style>
 </head>
 <body>
-<div class="top">会员充值中心</div>
-<div class="nav">
-    <a href="home.html">返回学员首页</a>
-    <a href="admin.html">管理员订单后台</a>
-    <a href="index.html">登录页</a>
+
+<div class="top">开通会员 · 解锁全部题库</div>
+
+<div class="nav-bar">
+  <a href="home.html">返回刷题</a>
+  <a href="admin.html">管理后台</a>
+  <a href="pay.html">会员中心</a>
+  <a href="index.html">登录页</a>
 </div>
+
 <div class="content">
-    <div class="vip-card">
-        <h3>月度会员</h3>
-        <p>解锁全部自定义题库，无限制刷题</p>
-        <button onclick="createOrder('月度会员')">立即开通</button>
-    </div>
-    <div class="vip-card">
-        <h3>年度会员</h3>
-        <p>全年题库更新免费、学习报表导出权限</p>
-        <button onclick="createOrder('年度会员')">立即开通</button>
-    </div>
+  <div class="card">
+    <h3>月度会员</h3>
+    <div class="price">¥29 / 30天</div>
+    <div class="info">✅ 解锁全部100题<br>✅ 查看全部答案解析<br>✅ 分类刷题无限制</div>
+    <button onclick="buy('月度会员')">立即开通</button>
+  </div>
+
+  <div class="card">
+    <h3>年度会员（推荐）</h3>
+    <div class="price">¥69 / 365天</div>
+    <div class="info">✅ 全年免费更新题目<br>✅ 完整答案+解析<br>✅ 性价比最高</div>
+    <button onclick="buy('年度会员')">立即开通</button>
+  </div>
+
+  <div class="card">
+    <h3>终身会员</h3>
+    <div class="price">¥129 / 永久</div>
+    <div class="info">✅ 终身使用权限<br>✅ 永久免费更新<br>✅ 后续新增题目全免费</div>
+    <button onclick="buy('终身会员')">立即开通</button>
+  </div>
 </div>
+
 <script>
-//生成订单存入本地，后台订单页面可查看
-function createOrder(name){
-    let ord=JSON.parse(localStorage.getItem('order')||'[]');
-    ord.push({name,time:new Date().toLocaleString()});
-    localStorage.setItem('order',JSON.stringify(ord));
-    alert(name+'订单创建成功，管理员后台订单管理查看');
+function buy(typ){
+  if(confirm('确定开通【'+typ+'】？\n开通后立即解锁全部100道题目答案！')){
+    localStorage.setItem('isVip','1');
+    alert('开通成功！✅ 返回刷题页面即可查看全部答案');
+    location.href='home.html';
+  }
 }
 </script>
 </body>
