@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>数据技能实训平台 - 分类刷题</title>
+<title>数据技能实训平台</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei"}
 .top{background:#165DFF;color:#fff;padding:18px;font-size:22px;text-align:center}
-.nav-bar{background:#f0f3f9;padding:12px;display:flex;flex-wrap:wrap;gap:8px;text-align:center;justify-content:center}
+.nav-bar{background:#f0f3f9;padding:12px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
 .nav-bar a{padding:10px 14px;background:#165DFF;color:#fff;border-radius:6px;text-decoration:none;font-size:15px}
 .cate{display:flex;flex-wrap:wrap;background:#fff;border-bottom:1px solid #eee}
 .cate button{flex:1;padding:14px;border:none;background:none;font-size:16px;outline:none}
@@ -18,6 +18,7 @@
 .type-tag{display:inline-block;background:#eef4ff;color:#165DFF;padding:3px 6px;border-radius:4px;font-size:12px;margin-right:6px}
 .opt{padding:8px;margin:4px 0;background:#f8f9fa;border-radius:4px;cursor:pointer}
 .ans{margin-top:10px;color:#099600;font-weight:bold;display:none}
+.lock{margin-top:8px;color:#ff3c00;font-weight:bold}
 button{cursor:pointer}
 </style>
 </head>
@@ -25,20 +26,19 @@ button{cursor:pointer}
 
 <div class="top">数据实战题库（PQ/SQL/Python/Regex）</div>
 
-<!-- 顶部导航：四个跳转按钮，提交后线上出现 -->
 <div class="nav-bar">
-  <a href="index.html">返回登录首页</a>
-  <a href="admin.html">题库管理后台</a>
-  <a href="pay.html">会员开通</a>
-  <a href="home.html">刷新题库页面</a>
+  <a href="index.html">返回登录</a>
+  <a href="admin.html">管理后台</a>
+  <a href="pay.html">开通会员</a>
+  <a href="home.html">刷新题库</a>
 </div>
 
 <div class="cate">
-  <button onclick="showType('all')" class="active">全部题目</button>
-  <button onclick="showType('PQ')">PowerQuery</button>
+  <button onclick="showType('all')" class="active">全部</button>
+  <button onclick="showType('PQ')">PQ M</button>
   <button onclick="showType('SQL')">SQL</button>
   <button onclick="showType('Python')">Python</button>
-  <button onclick="showType('Regex')">正则Regex</button>
+  <button onclick="showType('Regex')">正则</button>
 </div>
 
 <div class="content" id="qlist"></div>
@@ -46,18 +46,32 @@ button{cursor:pointer}
 <script>
 let currentType = 'all';
 let qData = JSON.parse(localStorage.getItem('que') || '[]');
+let isVip = localStorage.getItem('isVip') === '1';
 
 function render(){
   let html = '';
   let showList = currentType === 'all' ? qData : qData.filter(x=>x.type === currentType);
-  showList.forEach((item,idx)=>{
+
+  // 免费规则：每科前5题免费，总共20题免费
+  let pqCount = 0, sqlCount = 0, pyCount = 0, reCount = 0;
+
+  showList.forEach((item,idx) => {
+    let canView = false;
+    if(item.type === 'PQ'){ pqCount++; canView = pqCount <=5 || isVip; }
+    if(item.type === 'SQL'){ sqlCount++; canView = sqlCount <=5 || isVip; }
+    if(item.type === 'Python'){ pyCount++; canView = pyCount <=5 || isVip; }
+    if(item.type === 'Regex'){ reCount++; canView = reCount <=5 || isVip; }
+
     html += `
     <div class="que-box">
       <div><span class="type-tag">${item.type}</span></div>
       <div class="que-title">${item.q}</div>
       ${item.opt.map((o,i)=>`<div class="opt" onclick="chk(${idx},${i})">${String.fromCharCode(65+i)}. ${o}</div>`).join('')}
-      <div class="ans" id="ans${idx}">✅ 答案解析：${item.ans}</div>
-      <button onclick="showAns(${idx})" style="margin-top:8px;padding:6px 10px;background:#165DFF;color:#fff;border:none;border-radius:4px">查看答案</button>
+      <div class="ans" id="ans${idx}">✅ 答案：${item.ans}</div>
+      ${canView ? 
+        `<button onclick="showAns(${idx})" style="margin-top:8px;padding:6px 10px;background:#165DFF;color:#fff;border:none;border-radius:4px">查看答案</button>` 
+        : `<div class="lock">🔒 此题需开通会员查看</div>`
+      }
     </div>`;
   });
   document.getElementById('qlist').innerHTML = html;
@@ -75,6 +89,7 @@ function showType(t){
   document.querySelectorAll('.cate button').forEach((b,i)=>b.classList.toggle('active',arr[i]===t));
   render();
 }
+
 render();
 </script>
 </body>
