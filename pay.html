@@ -3,37 +3,44 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>会员充值订单页</title>
+<title>会员充值开通</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei"}
-.top{background:#165DFF;color:#fff;padding:22px 18px;font-size:30px;}
-.nav{background:#f0f3f9;padding:16px;display:flex;gap:14px}
-.bt{background:#165DFF;color:#fff;text-decoration:none;padding:11px 20px;border-radius:6px;font-size:17px;}
-.content{padding:24px;}
-.item{border:1px solid #dde3ee;border-radius:9px;padding:22px;margin-bottom:15px;}
-.item h3{font-size:23px;margin-bottom:7px}
-.item p{color:#444;font-size:16px}
+.top{background:#165DFF;color:#fff;padding:18px;font-size:24px;}
+.nav{padding:15px;background:#f0f3f9;}
+.nav a{background:#165DFF;color:#fff;padding:9px 15px;border-radius:6px;text-decoration:none;margin-right:12px;}
+.content{padding:22px}
+.vip-card{border:1px solid #ddd;padding:20px;border-radius:8px;margin-bottom:15px;max-width:400px}
+button{padding:9px 18px;background:#165DFF;color:#fff;border:none;border-radius:6px;cursor:pointer;}
 </style>
 </head>
 <body>
-<div class="top">会员充值｜订单管理页面</div>
+<div class="top">会员充值中心</div>
 <div class="nav">
-    <a href="home.html" class="bt">学员首页</a>
-    <a href="pay.html" class="bt">充值续费</a>
-    <a href="admin.html" class="bt">管理员订单后台</a>
+    <a href="home.html">返回学员首页</a>
+    <a href="admin.html">管理员订单后台</a>
+    <a href="index.html">登录页</a>
 </div>
 <div class="content">
-    <div class="item">
+    <div class="vip-card">
         <h3>月度会员</h3>
-        <p>30天全题库解锁，课程无限制练习</p>
+        <p>解锁全部自定义题库，无限制刷题</p>
+        <button onclick="createOrder('月度会员')">立即开通</button>
     </div>
-    <div class="item">
+    <div class="vip-card">
         <h3>年度会员</h3>
-        <p>全年权限+新增题目包免费更新</p>
+        <p>全年题库更新免费、学习报表导出权限</p>
+        <button onclick="createOrder('年度会员')">立即开通</button>
     </div>
 </div>
-<div style="padding:18px">
-    <a href="index.html" class="bt">返回登录首页</a>
-</div>
+<script>
+//生成订单存入本地，后台订单页面可查看
+function createOrder(name){
+    let ord=JSON.parse(localStorage.getItem('order')||'[]');
+    ord.push({name,time:new Date().toLocaleString()});
+    localStorage.setItem('order',JSON.stringify(ord));
+    alert(name+'订单创建成功，管理员后台订单管理查看');
+}
+</script>
 </body>
 </html>
