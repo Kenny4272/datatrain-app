@@ -3,57 +3,83 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>学员实训中心</title>
+<title>数据技能实训平台 - 分类刷题</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei"}
-.top{background:#165DFF;color:#fff;padding:18px;font-size:24px;}
-.nav{background:#f0f3f9;padding:15px;display:flex;gap:15px;flex-wrap:wrap;}
-.nav a{padding:9px 16px;background:#165DFF;color:#fff;border-radius:6px;text-decoration:none;}
-.content{padding:20px;max-width:900px;margin:0 auto;}
-.que-box{border:1px solid #e5e7eb;padding:20px;border-radius:8px;margin-bottom:18px;}
-.opt{margin:8px 0;padding:6px;cursor:pointer;}
-.ans{margin-top:12px;color:#096;font-weight:bold;display:none;}
-.operate button{padding:8px 14px;margin-right:10px;background:#165DFF;color:#fff;border:none;border-radius:5px;cursor:pointer;}
+.top{background:#165DFF;color:#fff;padding:18px;font-size:22px;text-align:center}
+.cate{display:flex;flex-wrap:wrap;background:#fff;border-bottom:1px solid #eee}
+.cate button{flex:1;padding:14px;border:none;background:none;font-size:16px;outline:none}
+.cate button.active{color:#165DFF;font-weight:bold;border-bottom:2px solid #165DFF}
+.content{padding:15px}
+.que-box{background:#fff;border-radius:8px;padding:16px;margin-bottom:12px;box-shadow:0 1px 2px #eee}
+.que-title{font-weight:bold;margin-bottom:8px}
+.type-tag{display:inline-block;background:#eef4ff;color:#165DFF;padding:3px 6px;border-radius:4px;font-size:12px;margin-right:6px}
+.opt{padding:8px;margin:4px 0;background:#f8f9fa;border-radius:4px;cursor:pointer}
+.ans{margin-top:10px;color:#099600;font-weight:bold;display:none}
+button{cursor:pointer}
 </style>
 </head>
 <body>
-<div class="top">数据实训｜学员练习中心</div>
-<div class="nav">
-    <a href="home.html">刷题练习</a>
-    <a href="pay.html">会员开通</a>
-    <a href="admin.html">管理员后台</a>
-    <a href="index.html">返回登录</a>
+<div class="top">数据实战题库（PQ/SQL/Python/Regex）</div>
+
+<div class="cate">
+  <button onclick="showType('all')" class="active">全部</button>
+  <button onclick="showType('PQ')">PQ M</button>
+  <button onclick="showType('SQL')">SQL</button>
+  <button onclick="showType('Python')">Python</button>
+  <button onclick="showType('Regex')">正则</button>
 </div>
-<div class="content">
-    <div id="qlist"></div>
-</div>
+
+<div class="content" id="qlist"></div>
+
 <script>
-//空白题库，后续在后台admin配置新增题目，当前预置2道演示题
-let qData = [
-    {q:"Power Query拆分文本常用函数是？",opt:["Text.Split","List.Sum","Table.SelectRows"],right:0,ans:"答案：Text.Split用于字符串拆分"},
-    {q:"SQL筛选条件关键字？",opt:["ORDER BY","WHERE","GROUP BY"],right:1,ans:"答案：WHERE做条件筛选"}
-];
-let html='';
-qData.forEach((item,idx)=>{
-    html += `<div class="que-box">
-    <p>第${idx+1}题：${item.q}</p>
-    <div class="opts">
-        ${item.opt.map((o,i)=>`<div class="opt" onclick="check(${idx},${i})">${String.fromCharCode(65+i)}.${o}</div>`).join('')}
-    </div>
-    <div class="ans" id="a${idx}">${item.ans}</div>
-    <div class="operate" style="margin-top:10px">
-        <button onclick="showAns(${idx})">查看答案</button>
-    </div>
-    </div>`;
-})
-document.getElementById('qlist').innerHTML=html;
-//答题校验
-function check(qidx,oidx){
-    let item=qData[qidx];
-    if(oidx==item.right)alert('回答正确！');
-    else alert('回答错误，请查看答案');
+let currentType = 'all';
+
+// 题目从本地存储读取
+let qData = JSON.parse(localStorage.getItem('que') || '[]');
+
+// 默认演示题目（你后台可删可改）
+if(qData.length === 0){
+  qData = [
+    {type:"PQ", q:"PowerQuery拆分文本用？",opt:["Text.Split","List.Sum","Table.AddColumn"],right:0,ans:"Text.Split 用于文本拆分"},
+    {type:"SQL",q:"SQL筛选用？",opt:["WHERE","GROUP BY","ORDER BY"],right:0,ans:"WHERE 条件筛选"},
+    {type:"Python",q:"Python读取CSV用？",opt:["pandas","requests","math"],right:0,ans:"pandas.read_csv()"},
+    {type:"Regex",q:"正则匹配手机号？",opt:["1[3-9]\\d{9}","\\d+","[a-z]+"],right:0,ans:"标准11位手机号匹配"}
+  ];
+  localStorage.setItem('que',JSON.stringify(qData));
 }
-function showAns(i){document.getElementById('a'+i).style.display='block'}
+
+function render(){
+  let html = '';
+  let showList = currentType === 'all' ? qData : qData.filter(x=>x.type === currentType);
+  showList.forEach((item,idx)=>{
+    html += `
+    <div class="que-box">
+      <div><span class="type-tag">${item.type}</span></div>
+      <div class="que-title">${item.q}</div>
+      ${item.opt.map((o,i)=>`<div class="opt" onclick="chk(${idx},${i})">${String.fromCharCode(65+i)}. ${o}</div>`).join('')}
+      <div class="ans" id="ans${idx}">✅ 答案：${item.ans}</div>
+      <button onclick="showAns(${idx})" style="margin-top:8px;padding:6px 10px;background:#165DFF;color:#fff;border:none;border-radius:4px">查看答案</button>
+    </div>`;
+  });
+  document.getElementById('qlist').innerHTML = html;
+}
+
+function showAns(i){document.getElementById('ans'+i).style.display='block'}
+function chk(i,sel){
+  let right = qData[i].right;
+  if(sel == right) alert('✅ 回答正确！');
+  else alert('❌ 回答错误');
+}
+
+function showType(t){
+  currentType = t;
+  document.querySelectorAll('.cate button').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.cate button')[['all','PQ','SQL','Python','Regex'].indexOf(t)].classList.add('active');
+  render();
+}
+
+render();
 </script>
 </body>
 </html>
