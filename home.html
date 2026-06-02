@@ -25,20 +25,20 @@ button{cursor:pointer}
 
 <div class="top">数据实战题库（PQ/SQL/Python/Regex）</div>
 
-<!-- 导航按钮：可以跳转到所有页面！-->
+<!-- 顶部导航：四个跳转按钮，提交后线上出现 -->
 <div class="nav-bar">
-  <a href="index.html">返回登录</a>
-  <a href="admin.html">管理后台</a>
+  <a href="index.html">返回登录首页</a>
+  <a href="admin.html">题库管理后台</a>
   <a href="pay.html">会员开通</a>
-  <a href="home.html">刷新题库</a>
+  <a href="home.html">刷新题库页面</a>
 </div>
 
 <div class="cate">
-  <button onclick="showType('all')" class="active">全部</button>
-  <button onclick="showType('PQ')">PQ M</button>
+  <button onclick="showType('all')" class="active">全部题目</button>
+  <button onclick="showType('PQ')">PowerQuery</button>
   <button onclick="showType('SQL')">SQL</button>
   <button onclick="showType('Python')">Python</button>
-  <button onclick="showType('Regex')">正则</button>
+  <button onclick="showType('Regex')">正则Regex</button>
 </div>
 
 <div class="content" id="qlist"></div>
@@ -56,7 +56,7 @@ function render(){
       <div><span class="type-tag">${item.type}</span></div>
       <div class="que-title">${item.q}</div>
       ${item.opt.map((o,i)=>`<div class="opt" onclick="chk(${idx},${i})">${String.fromCharCode(65+i)}. ${o}</div>`).join('')}
-      <div class="ans" id="ans${idx}">✅ 答案：${item.ans}</div>
+      <div class="ans" id="ans${idx}">✅ 答案解析：${item.ans}</div>
       <button onclick="showAns(${idx})" style="margin-top:8px;padding:6px 10px;background:#165DFF;color:#fff;border:none;border-radius:4px">查看答案</button>
     </div>`;
   });
@@ -66,16 +66,13 @@ function render(){
 function showAns(i){document.getElementById('ans'+i).style.display='block'}
 function chk(i,sel){
   let right = qData[i].right;
-  if(sel == right) alert('✅ 回答正确！');
-  else alert('❌ 回答错误');
+  sel == right ? alert('回答正确✅') : alert('回答错误❌');
 }
 
 function showType(t){
   currentType = t;
   let arr = ['all','PQ','SQL','Python','Regex'];
-  document.querySelectorAll('.cate button').forEach((b,i)=>{
-    b.classList.toggle('active',arr[i]===t);
-  });
+  document.querySelectorAll('.cate button').forEach((b,i)=>b.classList.toggle('active',arr[i]===t));
   render();
 }
 render();
