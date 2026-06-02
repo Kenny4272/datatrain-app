@@ -2,91 +2,80 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>企业版管理后台 · 数据实训平台</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>平台管理后台</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif}
-.top-header{
-  background:#165DFF;
-  color:#fff;
-  padding:22px 16px;
-  font-size:34px;
-}
-.nav-box{
-  background:#f0f3f9;
-  padding:16px;
-  display:flex;
-  gap:14px;
-}
-.nav-btn{
-  background:#165DFF;
-  color:#fff;
-  border:none;
-  padding:12px 22px;
-  border-radius:6px;
-  font-size:18px;
-  text-decoration:none;
-}
-.content-wrap{
-  padding:20px;
-}
-.card-item{
-  border:1px solid #d9e0ec;
-  border-radius:10px;
-  padding:22px;
-  margin-bottom:16px;
-  text-decoration:none;
-  display:block;
-  color:#222;
-}
-.card-item h3{
-  font-size:26px;
-  margin-bottom:8px;
-}
-.card-item p{
-  font-size:17px;
-  color:#444;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei"}
+.top{background:#222;color:#fff;padding:16px;font-size:22px;}
+.menu{display:flex;background:#333;flex-wrap:wrap;}
+.menu div{padding:14px 20px;color:#fff;cursor:pointer;border-right:1px solid #444;}
+.menu div:hover{background:#165DFF}
+.content{padding:22px}
+.block{display:none;border:1px solid #ddd;padding:20px;border-radius:8px;margin-top:15px;}
+.active{display:block;}
+input,select{padding:8px;margin:6px;}
+button{padding:8px 12px;background:#165DFF;color:#fff;border:none;border-radius:4px;}
 </style>
 </head>
 <body>
-<div class="top-header">企业版管理后台 · 数据实训平台</div>
-
-<!-- 顶部导航按钮（锚点跳转下方对应模块） -->
-<div class="nav-box">
-  <a href="#info" class="nav-btn">企业信息配置</a>
-  <a href="#user" class="nav-btn">学员批量管理</a>
-  <a href="#order" class="nav-btn">订单&权限开通</a>
-  <a href="#data" class="nav-btn">学习数据看板</a>
-  <a href="#question" class="nav-btn">题库管理导入</a>
+<div class="top">实训平台·管理员后台</div>
+<!--四大功能菜单，全部点击切换-->
+<div class="menu">
+    <div onclick="switchTab(1)">学员管理</div>
+    <div onclick="switchTab(2)">订单管理</div>
+    <div onclick="switchTab(3)">学习报表</div>
+    <div onclick="switchTab(4)">题库配置</div>
+    <div onclick="location.href='home.html'">前往学员端</div>
+    <div onclick="location.href='pay.html'">付费订单</div>
+    <div onclick="location.href='index.html'">退出登录</div>
 </div>
-
-<div class="content-wrap">
-  <!-- 学员管理卡片 -->
-  <a id="user" href="#user" class="card-item">
-    <h3>学员管理</h3>
-    <p>Excel批量导入账号、开通有效期、分组部门</p>
-  </a>
-  <!-- 订单管理卡片 -->
-  <a id="order" href="#order" class="card-item">
-    <h3>订单管理</h3>
-    <p>微信收款订单记录、手动/自动开通会员权限</p>
-  </a>
-  <!-- 学习报表卡片 -->
-  <a id="data" href="#data" class="card-item">
-    <h3>学习报表</h3>
-    <p>完成率、错题统计、部门技能排行导出</p>
-  </a>
-  <!-- 题库配置卡片 -->
-  <a id="question" href="#question" class="card-item">
-    <h3>题库配置</h3>
-    <p>JSON一键导入新增行业题目包</p>
-  </a>
+<div class="content">
+    <!--1学员管理-->
+    <div id="tab1" class="block active">
+        <h3>学员信息管理</h3>
+        <p>新增/查看/编辑平台学员账号数据</p>
+        <input placeholder="学员姓名"><input placeholder="手机号"><button>新增学员</button>
+    </div>
+    <!--2订单管理-->
+    <div id="tab2" class="block">
+        <h3>会员订单管理</h3>
+        <p>查看所有用户充值订单、开通记录，同步pay页面订单</p>
+    </div>
+    <!--3学习报表-->
+    <div id="tab3" class="block">
+        <h3>学员学习统计报表</h3>
+        <p>做题数量、正确率、会员开通数据汇总</p>
+    </div>
+    <!--4题库配置（新增题目，自动同步学员home做题页面）-->
+    <div id="tab4" class="block">
+        <h3>题库新增配置（添加题目自动同步刷题页）</h3>
+        <p>题干：<input id="q"><br>
+        选项A：<input id="o1"> 选项B：<input id="o2"> 选项C：<input id="o3"><br>
+        正确答案下标(0/A,1/B,2/C)：<input id="right"><br>
+        答案解析：<input id="ans"><br>
+        <button onclick="addQue()">保存入库</button>
+        </p>
+    </div>
 </div>
-
-<!-- 返回首页链接 -->
-<div style="padding:15px;">
-  <a href="index.html" class="nav-btn">返回用户实训首页</a>
-</div>
+<script>
+//菜单切换
+function switchTab(n){
+    document.querySelectorAll('.block').forEach(d=>d.classList.remove('active'));
+    document.getElementById('tab'+n).classList.add('active');
+}
+//新增题目简易存储
+let localQue=JSON.parse(localStorage.getItem('que')||'[]');
+function addQue(){
+    let q={
+        q:document.getElementById('q').value,
+        opt:[document.getElementById('o1').value,document.getElementById('o2').value,document.getElementById('o3').value],
+        right:Number(document.getElementById('right').value),
+        ans:document.getElementById('ans').value
+    }
+    localQue.push(q);
+    localStorage.setItem('que',JSON.stringify(localQue));
+    alert('题目添加成功，刷新学员home页面即可刷题');
+}
+</script>
 </body>
 </html>
