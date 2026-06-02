@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ========== 这里就是你要加的 PWA 注册脚本 ========== -->
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#165DFF">
+<meta name="apple-mobile-web-app-title" content="数据实战">
+<link rel="apple-touch-icon" href="icon.png">
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(reg => console.log('SW注册成功'))
+      .catch(err => console.log('SW注册失败'));
+  });
+}
+</script>
+<!-- =================================================== -->
+
+<title>数据技能实训全家桶</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Microsoft YaHei}
+.head{background:#165DFF;color:#fff;padding:16px;text-align:center;font-size:20px}
+.nav{display:flex;background:#f5f7fa}
+.nav a{flex:1;text-align:center;padding:12px;text-decoration:none;color:#333;border-right:1px solid #eee}
+.content{padding:15px;min-height:calc(100vh - 112px)}
+.box{border:1px solid #eee;border-radius:8px;padding:14px;margin-bottom:12px}
+.btn{background:#165DFF;color:#fff;border:none;padding:8px 16px;border-radius:6px;margin-top:8px}
+</style>
+</head>
+<body>
+
+<div class="head">数据技能实训全家桶｜离线实战平台</div>
+<div class="nav">
+<a href="#train">在线刷题</a>
+<a href="#data">自有数据导入</a>
+<a href="#cert">证书查询</a>
+<a href="#vip">开通会员</a>
+</div>
+<div class="content">
+<div class="box">
+<h3>制造业ERP题库(50题)</h3>
+<p>物料清洗/采购入库/BOM/生产/库存盘点全业务场景</p>
+<button class="btn">开始练习</button>
+</div>
+<div class="box">
+<h3>电商GMV分析题库(50题)</h3>
+<p>订单GMV/渠道/用户复购/退款风控全链路</p>
+<button class="btn">开始练习</button>
+</div>
+<div class="box">
+<h3>自有脱敏数据离线ETL</h3>
+<p>上传企业脱敏数据，离线完成清洗→SQL→Python→正则全流程</p>
+<button class="btn">导入数据</button>
+</div>
+</div>
+
+</body>
+</html>
