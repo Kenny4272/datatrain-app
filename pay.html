@@ -1,22 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>会员开通付款</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>会员充值订单页</title>
 <style>
-body{text-align:center;padding:30px;font-family:微软雅黑}
-.qrcode{border:1px solid #eee;padding:20px;width:320px;margin:20px auto}
-.btn{padding:10px 22px;background:#165DFF;color:#fff;border:none;border-radius:6px;font-size:16px}
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei"}
+.top{background:#165DFF;color:#fff;padding:22px 18px;font-size:30px;}
+.nav{background:#f0f3f9;padding:16px;display:flex;gap:14px}
+.bt{background:#165DFF;color:#fff;text-decoration:none;padding:11px 20px;border-radius:6px;font-size:17px;}
+.content{padding:24px;}
+.item{border:1px solid #dde3ee;border-radius:9px;padding:22px;margin-bottom:15px;}
+.item h3{font-size:23px;margin-bottom:7px}
+.item p{color:#444;font-size:16px}
 </style>
 </head>
 <body>
-<h2>企业版｜个人版付费开通</h2>
-<div class="qrcode">
-<p>微信扫码付款</p>
-<p>个人版：599元/终身 | 企业版：1999元/年</p>
-<p>（此处替换你的微信收款二维码图片）</p>
+<div class="top">会员充值｜订单管理页面</div>
+<div class="nav">
+    <a href="home.html" class="bt">学员首页</a>
+    <a href="pay.html" class="bt">充值续费</a>
+    <a href="admin.html" class="bt">管理员订单后台</a>
 </div>
-<button class="btn">已付款，提交开通申请</button>
-<p style="margin-top:15px">付款后后台10分钟内完成权限开通，开通后全题库+离线数据功能解锁</p>
+<div class="content">
+    <div class="item">
+        <h3>月度会员</h3>
+        <p>30天全题库解锁，课程无限制练习</p>
+    </div>
+    <div class="item">
+        <h3>年度会员</h3>
+        <p>全年权限+新增题目包免费更新</p>
+    </div>
+</div>
+<div style="padding:18px">
+    <a href="index.html" class="bt">返回登录首页</a>
+</div>
 </body>
 </html>
