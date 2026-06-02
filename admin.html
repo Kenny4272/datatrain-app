@@ -3,21 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>管理后台 - 题库批量导入版</title>
+<title>管理后台 - 完整版</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei"}
-.top{background:#222;color:#fff;padding:16px}
+.top{background:#222;color:#fff;padding:16px;font-size:24px}
 .menu{display:flex;flex-wrap:wrap;background:#333}
-.menu div{padding:14px 20px;color:#fff;cursor:pointer}
+.menu div{padding:14px 22px;color:#fff;cursor:pointer;font-size:22px;border-right:1px solid #444}
 .menu div:hover{background:#165DFF}
-.content{padding:20px}
-.block{display:none;margin-top:15px;padding:20px;border:1px solid #ddd;border-radius:8px}
+.content{padding:22px}
+.block{display:none;margin-top:15px;padding:22px;border:1px solid #ddd;border-radius:8px}
 .active{display:block}
 input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid #ddd;border-radius:4px}
-button{background:#165DFF;color:#fff;border:none;padding:10px 16px;border-radius:4px;cursor:pointer;margin:3px}
-.del-btn{background:#f53f3f}
+button{background:#165DFF;color:#fff;border:none;padding:10px 16px;border-radius:4px;cursor:pointer;margin:4px}
+.del{background:#f53f3f}
+.vip-btn{background:#00b42a}
 .import-btn{background:#00b42a}
-.item-line{border-bottom:1px solid #eee;padding:8px;margin:4px 0}
+.item-line{border-bottom:1px solid #eee;padding:9px;margin:5px 0}
 </style>
 </head>
 <body>
@@ -28,15 +29,35 @@ button{background:#165DFF;color:#fff;border:none;padding:10px 16px;border-radius
   <div onclick="goto(3)">学习报表</div>
   <div onclick="goto(4)">题库配置</div>
   <div onclick="location.href='home.html'">去刷题</div>
+  <div onclick="location.href='pay.html'">会员付费页</div>
+  <div onclick="location.href='index.html'">退出登录</div>
 </div>
 
 <div class="content">
-  <div id="tab1" class="block">学员管理（可扩展Excel批量导入学员）</div>
-  <div id="tab2" class="block">订单管理：全部会员开通订单记录</div>
-  <div id="tab3" class="block">学习报表：做题正确率、会员数据汇总</div>
+<!--1 学员管理模块-->
+<div id="tab1" class="block active">
+  <h3>学员管理 | 新增/删除/手动开通VIP权限</h3>
+  <input id="stuName" placeholder="学员账号名称">
+  <button onclick="addStudent()">新增普通学员</button>
+  <hr style="margin:18px 0;">
+  <h4>全部学员列表</h4>
+  <div id="stuListBox"></div>
+</div>
 
-  <div id="tab4" class="block active">
-    <!--单条新增区-->
+<!--2 订单管理模块-->
+<div id="tab2" class="block">
+  <h3>会员订单记录（自动同步用户付费订单）</h3>
+  <div id="orderBox"></div>
+</div>
+
+<!--3 学习数据报表-->
+<div id="tab3" class="block">
+  <h3>平台数据汇总报表</h3>
+  <div id="reportBox"></div>
+</div>
+
+<!--4 题库配置（保留原有批量导入+单条删题）-->
+<div id="tab4" class="block">
     <h3>单题新增（手动录入）</h3>
     <select id="type">
       <option value="PQ">PowerQuery M</option>
@@ -53,35 +74,109 @@ button{background:#165DFF;color:#fff;border:none;padding:10px 16px;border-radius
     <button onclick="add()">保存单题</button>
 
     <hr style="margin:22px 0;">
-    <!--批量一键导入区-->
-    <h3>✅ 百题一键批量导入（粘贴完整JSON数组，一键入库100题）</h3>
+    <h3>✅ 百题一键批量导入（粘贴完整JSON数组）</h3>
     <textarea id="batchJson" rows="6" placeholder="粘贴全套题库JSON，点击批量导入即可"></textarea>
     <button class="import-btn" onclick="batchImport()">一键批量导入题库</button>
 
     <hr style="margin:22px 0;">
     <h3>全量题库列表（可单条删除冗余题目）</h3>
     <div id="listBox"></div>
-  </div>
+</div>
 </div>
 
 <script>
-let arr = JSON.parse(localStorage.getItem('que') || '[]');
-//刷新题库列表
-function refreshList(){
-  arr = JSON.parse(localStorage.getItem('que') || '[]');
-  let html='';
-  arr.forEach((item,i)=>{
-    html += `<div class="item-line">
-    <span>[${item.type}]</span> ${item.q.substring(0,40)}...
-    <button class="del-btn" onclick="del(${i})">删除本条</button>
-    </div>`
-  })
-  document.getElementById('listBox').innerHTML = html;
-}
-//切换标签页
+//=====数据初始化=====
+//学员存储
+let studentArr = JSON.parse(localStorage.getItem('stuList')||'[]');
+//订单存储
+let orderArr = JSON.parse(localStorage.getItem('order')||'[]');
+//题库存储
+let queArr = JSON.parse(localStorage.getItem('que')||'[]');
+
+//=====标签切换=====
 function goto(n){
   document.querySelectorAll('.block').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab'+n).classList.add('active');
+  //切换自动刷新数据
+  if(n===1)refreshStu();
+  if(n===2)refreshOrder();
+  if(n===3)refreshReport();
+  if(n===4)refreshQue();
+}
+
+//=====【1学员管理逻辑】=====
+function addStudent(){
+  let name = document.getElementById('stuName').value.trim();
+  if(!name){alert('请填写学员账号');return;}
+  studentArr.push({name:name,isVip:false});
+  localStorage.setItem('stuList',JSON.stringify(studentArr));
+  refreshStu();
+  document.getElementById('stuName').value='';
+  alert('新增学员成功');
+}
+//删除学员
+function delStu(idx){
+  studentArr.splice(idx,1);
+  localStorage.setItem('stuList',JSON.stringify(studentArr));
+  refreshStu();
+}
+//管理员手动开VIP
+function openVip(idx){
+  studentArr[idx].isVip=true;
+  localStorage.setItem('stuList',JSON.stringify(studentArr));
+  refreshStu();
+  alert('已为本学员开通全量会员权限');
+}
+//刷新学员列表
+function refreshStu(){
+  let html='';
+  studentArr.forEach((item,i)=>{
+    let vipTxt = item.isVip?'✅已开通会员':'❌普通免费学员';
+    html += `<div class="item-line">【${item.name}】 ${vipTxt}
+    <button class="vip-btn" onclick="openVip(${i})">手动开会员</button>
+    <button class="del" onclick="delStu(${i})">删除学员</button>
+    </div>`
+  })
+  document.getElementById('stuListBox').innerHTML=html||'暂无学员数据';
+}
+
+//=====【2订单管理逻辑】=====
+function refreshOrder(){
+  let html='';
+  orderArr.forEach(item=>{
+    html += `<div class="item-line">套餐：${item.name} | 下单时间：${item.time}</div>`
+  })
+  document.getElementById('orderBox').innerHTML=html||'暂无付费订单';
+}
+
+//=====【3学习报表逻辑】=====
+function refreshReport(){
+  let pq = queArr.filter(x=>x.type==='PQ').length;
+  let sql = queArr.filter(x=>x.type==='SQL').length;
+  let py = queArr.filter(x=>x.type==='Python').length;
+  let reg = queArr.filter(x=>x.type==='Regex').length;
+  let vipNum = studentArr.filter(x=>x.isVip===true).length;
+  let allStu = studentArr.length;
+  let allQue = queArr.length;
+  let html = `
+  <p>总题库量：${allQue} 题</p>
+  <p>PQ题库：${pq}题 | SQL题库：${sql}题 | Python题库：${py}题 | 正则：${reg}题</p>
+  <p>注册学员总数：${allStu} 人 | VIP付费学员：${vipNum} 人</p>
+  `;
+  document.getElementById('reportBox').innerHTML=html;
+}
+
+//=====【4题库配置原有逻辑】=====
+function refreshQue(){
+  queArr = JSON.parse(localStorage.getItem('que') || '[]');
+  let html='';
+  queArr.forEach((item,i)=>{
+    html += `<div class="item-line">
+    <span>[${item.type}]</span> ${item.q.substring(0,40)}...
+    <button class="del" onclick="delQue(${i})">删除本条</button>
+    </div>`
+  })
+  document.getElementById('listBox').innerHTML = html;
 }
 //单条新增题目
 function add(){
@@ -92,33 +187,38 @@ function add(){
   let o3 = document.getElementById('o3').value;
   let right = Number(document.getElementById('right').value);
   let ans = document.getElementById('ans').value;
-  arr.push({type:t, q:q, opt:[o1,o2,o3], right:right, ans:ans});
-  localStorage.setItem('que', JSON.stringify(arr));
+  queArr.push({type:t, q:q, opt:[o1,o2,o3], right:right, ans:ans});
+  localStorage.setItem('que', JSON.stringify(queArr));
   alert('单题添加成功');
-  refreshList();
+  refreshQue();
 }
-//单条删除题目
-function del(idx){
-  arr.splice(idx,1);
-  localStorage.setItem('que',JSON.stringify(arr));
-  refreshList();
-  alert('删除成功，刷题页刷新生效');
+//删除题目
+function delQue(idx){
+  queArr.splice(idx,1);
+  localStorage.setItem('que',JSON.stringify(queArr));
+  refreshQue();
+  alert('删除成功');
 }
-//核心：一键批量导入
+//批量导入题库
 function batchImport(){
   let jsonStr = document.getElementById('batchJson').value.trim();
   try{
     let batchList = JSON.parse(jsonStr);
-    arr = [...arr,...batchList]; //追加到现有题库，不覆盖原有题目
-    localStorage.setItem('que',JSON.stringify(arr));
-    refreshList();
-    alert(`批量导入成功，共新增${batchList.length}道题目！刷新刷题页面查看`);
+    queArr = [...queArr,...batchList];
+    localStorage.setItem('que',JSON.stringify(queArr));
+    refreshQue();
+    alert(`批量导入成功，新增${batchList.length}道题目！`);
     document.getElementById('batchJson').value='';
   }catch(e){
-    alert('JSON格式错误，检查粘贴内容！'+e.message);
+    alert('JSON格式错误：'+e.message);
   }
 }
-refreshList();
+
+//页面初始化加载
+refreshStu();
+refreshOrder();
+refreshReport();
+refreshQue();
 </script>
 </body>
 </html>
