@@ -2,103 +2,43 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#165DFF">
-<title>数据技能实训平台</title>
-<link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon.png">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>数据技能实训平台-登录</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,"Microsoft YaHei"}
-.top-nav{display:flex;background:#fff;border-radius:10px;overflow:hidden;margin-bottom:20px;box-shadow:0 2px 8px #eee}
-.top-nav a{flex:1;text-align:center;padding:14px 0;text-decoration:none;color:#333;border-right:1px solid #efefef;font-size:15px}
-.top-nav a:last-child{border:none}
-.top-nav a.vip{color:#165DFF;font-weight:bold}
-.box-card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 1px 6px #eee}
-h3{margin-bottom:12px;color:#222}
-.desc{color:#666;font-size:14px;margin-bottom:18px;line-height:1.6}
-.btn{display:inline-block;padding:10px 22px;background:#165DFF;color:#fff;border-radius:8px;text-decoration:none;border:none;font-size:15px}
-.question-item{border:1px solid #eee;padding:16px;margin:10px 0;border-radius:8px}
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei"}
+body{background:#f5f7fa;padding-top:80px;}
+.login-box{width:380px;margin:0 auto;background:#fff;padding:35px;border-radius:10px;box-shadow:0 0 12px #e4e7ed;}
+h2{text-align:center;color:#333;margin-bottom:30px;}
+.item{margin-bottom:20px;}
+label{display:block;margin-bottom:8px;color:#555;}
+input{width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:15px;}
+.btn{width:100%;padding:13px;background:#165DFF;color:#fff;border:none;border-radius:6px;font-size:16px;margin-top:10px;cursor:pointer;}
+.link-box{margin-top:20px;text-align:center;}
+a{color:#165DFF;text-decoration:none;margin:0 10px;}
 </style>
 </head>
 <body>
-<!--顶部导航（全部可跳转）-->
-<div class="top-nav">
-    <a href="home.html">产品介绍</a>
-    <a href="pay.html" class="vip">开通会员</a>
-    <a href="admin.html">管理后台</a>
+<div class="login-box">
+    <h2>实训平台登录</h2>
+    <div class="item">
+        <label>账号</label>
+        <input id="user" placeholder="学员/管理员账号">
+    </div>
+    <div class="item">
+        <label>密码</label>
+        <input id="pwd" type="password" placeholder="登录密码">
+    </div>
+    <button class="btn" onclick="login()">登录进入</button>
+    <div class="link-box">
+        <a href="home.html">游客体验首页</a>
+    </div>
 </div>
-
-<!--模块入口-->
-<div class="box-card">
-    <h3>制造业ERP题库</h3>
-    <p class="desc">物料清洗/采购入库/BOM/生产/库存盘点全业务场景</p>
-    <a href="#train" class="btn">开始练习</a>
-</div>
-<div class="box-card">
-    <h3>电商GMV分析题库</h3>
-    <p class="desc">订单GMV/渠道/用户复购/退款风控全链路</p>
-    <a href="#gmv" class="btn">开始练习</a>
-</div>
-<div class="box-card">
-    <h3>自有脱敏数据离线ETL</h3>
-    <p class="desc">上传企业脱敏数据，离线完成清洗→SQL→Python→正则全流程</p>
-    <a href="#data" class="btn">导入数据</a>
-</div>
-
-<!--题库渲染区域（JS自动读取question.json填充题目）-->
-<div id="train" class="box-card">
-    <h3>制造业ERP题库专区</h3>
-    <div id="factory-list"></div>
-</div>
-<div id="gmv" class="box-card">
-    <h3>电商GMV数据分析专区</h3>
-    <div id="shop-list"></div>
-</div>
-<div id="data" class="box-card">
-    <h3>自定义题库导入</h3>
-    <p class="desc">替换项目根目录question.json即可批量更新全套题目</p>
-</div>
-
 <script>
-// 自动拉取根目录question.json题库文件
-fetch('./question.json')
-.then(res=>res.json())
-.then(data=>{
-  const allList = data.questions;
-  // 筛选制造业题目
-  const factory = allList.filter(item=>item.module==='制造业ERP');
-  // 筛选电商题目
-  const shop = allList.filter(item=>item.module==='电商GMV');
-  // 渲染制造业题库
-  let fHtml = '';
-  factory.forEach(q=>{
-    fHtml += `<div class="question-item">
-      <p><b>${q.tag}【${q.difficulty}】</b>：${q.title}</p>
-      <p>题干：${q.question}</p>
-      <p>PowerQuery：${q.answer_pq}</p>
-      <p>SQL：${q.answer_sql}</p>
-      <p>Python：${q.answer_python||'无'}</p>
-    </div>`
-  })
-  document.getElementById('factory-list').innerHTML = fHtml;
-  // 渲染电商题库
-  let sHtml = '';
-  shop.forEach(q=>{
-    sHtml += `<div class="question-item">
-      <p><b>${q.tag}【${q.difficulty}】</b>：${q.title}</p>
-      <p>题干：${q.question}</p>
-      <p>PowerQuery：${q.answer_pq||'无'}</p>
-      <p>SQL：${q.answer_sql}</p>
-      <p>Python：${q.answer_python||'无'}</p>
-    </div>`
-  })
-  document.getElementById('shop-list').innerHTML = sHtml;
-})
-.catch(err=>console.log('题库加载异常',err))
-
-//PWA离线注册
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('./service-worker.js')
+//简易登录：admin进后台，任意账号进学员页
+function login(){
+    let u = document.getElementById('user').value;
+    if(u=='admin')location.href='admin.html';
+    else location.href='home.html';
 }
 </script>
 </body>
