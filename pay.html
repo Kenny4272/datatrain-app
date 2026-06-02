@@ -6,15 +6,17 @@
 <title>会员开通 - 数据实训平台</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei"}
-.top{background:#165DFF;color:#fff;padding:18px;font-size:22px;text-align:center}
-.nav-bar{background:#f0f3f9;padding:12px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
-.nav-bar a{padding:10px 14px;background:#165DFF;color:#fff;border-radius:6px;text-decoration:none;font-size:15px}
-.content{padding:20px;max-width:500px;margin:0 auto}
-.card{background:#fff;border-radius:12px;padding:24px;margin-bottom:16px;box-shadow:0 2px 8px #ddd}
-.card h3{font-size:20px;margin-bottom:8px}
-.price{font-size:24px;color:#ff3c00;font-weight:bold;margin:10px 0}
-button{width:100%;padding:14px;background:#165DFF;color:#fff;border:none;border-radius:8px;font-size:16px;margin-top:10px}
-.info{color:#666;margin-top:10px;line-height:1.5}
+.top{background:#165DFF;color:#fff;padding:24px;font-size:32px;text-align:center}
+.nav-bar{background:#f0f3f9;padding:16px;display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.nav-bar a{padding:12px 22px;background:#165DFF;color:#fff;border-radius:8px;text-decoration:none;font-size:20px}
+.content{padding:24px;max-width:580px;margin:0 auto}
+.card{background:#fff;border-radius:16px;padding:30px;margin-bottom:22px;box-shadow:0 3px 12px #e2e6ee}
+.card h3{font-size:32px;margin-bottom:12px}
+.price{font-size:38px;color:#ff3c00;font-weight:bold;margin:12px 0}
+.info{font-size:20px;color:#444;margin:14px 0;line-height:2}
+.info span{color:#00b42a}
+.buy-btn{width:100%;padding:18px;background:#165DFF;color:#fff;border:none;border-radius:12px;font-size:26px;margin-top:12px}
+.tip{text-align:center;color:#999;margin-top:30px;font-size:16px}
 </style>
 </head>
 <body>
@@ -24,41 +26,92 @@ button{width:100%;padding:14px;background:#165DFF;color:#fff;border:none;border-
 <div class="nav-bar">
   <a href="home.html">返回刷题</a>
   <a href="admin.html">管理后台</a>
-  <a href="pay.html">会员中心</a>
+  <a href="pay.html" onclick="refreshVipInfo()">会员中心</a>
   <a href="index.html">登录页</a>
 </div>
+
+<!-- 会员状态提示 -->
+<div style="text-align:center;margin:20px 0;font-size:20px;color:#165DFF" id="vipTip"></div>
 
 <div class="content">
   <div class="card">
     <h3>月度会员</h3>
     <div class="price">¥29 / 30天</div>
-    <div class="info">✅ 解锁全部100题<br>✅ 查看全部答案解析<br>✅ 分类刷题无限制</div>
-    <button onclick="buy('月度会员')">立即开通</button>
+    <div class="info">
+      <p><span>✅</span> 解锁全部100题</p>
+      <p><span>✅</span> 查看全部答案解析</p>
+      <p><span>✅</span> 分类刷题无限制</p>
+    </div>
+    <button class="buy-btn" onclick="buy('月度会员 ¥29/30天')">立即开通</button>
   </div>
 
   <div class="card">
     <h3>年度会员（推荐）</h3>
     <div class="price">¥69 / 365天</div>
-    <div class="info">✅ 全年免费更新题目<br>✅ 完整答案+解析<br>✅ 性价比最高</div>
-    <button onclick="buy('年度会员')">立即开通</button>
+    <div class="info">
+      <p><span>✅</span> 全年免费更新题目</p>
+      <p><span>✅</span> 完整答案+解析</p>
+      <p><span>✅</span> 性价比最高</p>
+    </div>
+    <button class="buy-btn" onclick="buy('年度会员 ¥69/365天')">立即开通</button>
   </div>
 
   <div class="card">
     <h3>终身会员</h3>
     <div class="price">¥129 / 永久</div>
-    <div class="info">✅ 终身使用权限<br>✅ 永久免费更新<br>✅ 后续新增题目全免费</div>
-    <button onclick="buy('终身会员')">立即开通</button>
+    <div class="info">
+      <p><span>✅</span> 终身使用权限</p>
+      <p><span>✅</span> 永久免费更新</p>
+      <p><span>✅</span> 后续新增题目全免费</p>
+    </div>
+    <button class="buy-btn" onclick="buy('终身会员 ¥129永久')">立即开通</button>
   </div>
 </div>
 
+<div class="tip">提示：开通后自动解锁全量答案，免费用户仅每科目前5题可查看答案</div>
+
 <script>
-function buy(typ){
-  if(confirm('确定开通【'+typ+'】？\n开通后立即解锁全部100道题目答案！')){
-    localStorage.setItem('isVip','1');
-    alert('开通成功！✅ 返回刷题页面即可查看全部答案');
-    location.href='home.html';
+// 页面加载初始化会员状态
+let isVip = localStorage.getItem('isVip')==='1';
+let orderList = JSON.parse(localStorage.getItem('order')||'[]');
+
+// 会员中心：刷新会员状态
+function refreshVipInfo(){
+  isVip = localStorage.getItem('isVip')==='1';
+  renderVipTip();
+  alert('已刷新会员状态！');
+}
+
+// 渲染顶部会员提示
+function renderVipTip(){
+  let tipDom = document.getElementById('vipTip');
+  if(isVip){
+    tipDom.innerText = '🎉 您已是付费会员，全题库答案已解锁';
+  }else{
+    tipDom.innerText = '🔓 当前为免费用户，仅20题可查看答案，开通会员解锁剩余80题';
   }
 }
+
+// 下单逻辑：生成订单存入后台、开通VIP
+function buy(productName){
+  let sure = confirm(`确认下单：${productName}？\n【模拟支付】确定即开通会员、订单自动存入管理后台`);
+  if(!sure) return;
+  // 生成订单
+  let newOrder = {
+    name:productName,
+    time:new Date().toLocaleString()
+  }
+  orderList.push(newOrder);
+  localStorage.setItem('order',JSON.stringify(orderList));
+  // 标记VIP
+  localStorage.setItem('isVip','1');
+  isVip=true;
+  renderVipTip();
+  alert('✅ 开通成功！订单已存入管理员后台订单列表，返回刷题页查看全部答案');
+}
+
+// 初始化渲染
+renderVipTip();
 </script>
 </body>
 </html>
