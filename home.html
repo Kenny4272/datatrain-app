@@ -3,42 +3,57 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>数据实训平台-学员首页</title>
+<title>学员实训中心</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei"}
-.header{background:#165DFF;color:#fff;padding:24px 18px;font-size:32px;}
-.nav-bar{background:#f0f3f9;padding:18px;display:flex;gap:15px;flex-wrap:wrap;}
-.btn{background:#165DFF;color:#fff;text-decoration:none;padding:12px 20px;border-radius:6px;font-size:17px;}
-.box-wrap{padding:22px;display:grid;gap:16px;}
-.card{border:1px solid #d9e0ec;border-radius:10px;padding:24px;text-decoration:none;color:#222;display:block;}
-.card h3{font-size:24px;margin-bottom:8px;}
-.card p{color:#555;font-size:16px;}
-.bottom{padding:20px;}
+.top{background:#165DFF;color:#fff;padding:18px;font-size:24px;}
+.nav{background:#f0f3f9;padding:15px;display:flex;gap:15px;flex-wrap:wrap;}
+.nav a{padding:9px 16px;background:#165DFF;color:#fff;border-radius:6px;text-decoration:none;}
+.content{padding:20px;max-width:900px;margin:0 auto;}
+.que-box{border:1px solid #e5e7eb;padding:20px;border-radius:8px;margin-bottom:18px;}
+.opt{margin:8px 0;padding:6px;cursor:pointer;}
+.ans{margin-top:12px;color:#096;font-weight:bold;display:none;}
+.operate button{padding:8px 14px;margin-right:10px;background:#165DFF;color:#fff;border:none;border-radius:5px;cursor:pointer;}
 </style>
 </head>
 <body>
-<div class="header">数据技能实训平台｜学员中心</div>
-<div class="nav-bar">
-    <a href="home.html" class="btn">实训首页</a>
-    <a href="admin.html" class="btn">后台管理</a>
-    <a href="pay.html" class="btn">会员充值开通</a>
+<div class="top">数据实训｜学员练习中心</div>
+<div class="nav">
+    <a href="home.html">刷题练习</a>
+    <a href="pay.html">会员开通</a>
+    <a href="admin.html">管理员后台</a>
+    <a href="index.html">返回登录</a>
 </div>
-<div class="box-wrap">
-    <a href="#course" id="course" class="card">
-        <h3>课程练习</h3>
-        <p>M/PowerQuery/SQL/Python题库在线刷题练习</p>
-    </a>
-    <a href="#record" id="record" class="card">
-        <h3>学习记录</h3>
-        <p>查看做题记录、错题汇总、完成进度</p>
-    </a>
-    <a href="#vip" id="vip" class="card">
-        <h3>会员权益</h3>
-        <p>开通会员解锁全量题库与进阶课程</p>
-    </a>
+<div class="content">
+    <div id="qlist"></div>
 </div>
-<div class="bottom">
-    <a href="index.html" class="btn">返回登录页</a>
-</div>
+<script>
+//空白题库，后续在后台admin配置新增题目，当前预置2道演示题
+let qData = [
+    {q:"Power Query拆分文本常用函数是？",opt:["Text.Split","List.Sum","Table.SelectRows"],right:0,ans:"答案：Text.Split用于字符串拆分"},
+    {q:"SQL筛选条件关键字？",opt:["ORDER BY","WHERE","GROUP BY"],right:1,ans:"答案：WHERE做条件筛选"}
+];
+let html='';
+qData.forEach((item,idx)=>{
+    html += `<div class="que-box">
+    <p>第${idx+1}题：${item.q}</p>
+    <div class="opts">
+        ${item.opt.map((o,i)=>`<div class="opt" onclick="check(${idx},${i})">${String.fromCharCode(65+i)}.${o}</div>`).join('')}
+    </div>
+    <div class="ans" id="a${idx}">${item.ans}</div>
+    <div class="operate" style="margin-top:10px">
+        <button onclick="showAns(${idx})">查看答案</button>
+    </div>
+    </div>`;
+})
+document.getElementById('qlist').innerHTML=html;
+//答题校验
+function check(qidx,oidx){
+    let item=qData[qidx];
+    if(oidx==item.right)alert('回答正确！');
+    else alert('回答错误，请查看答案');
+}
+function showAns(i){document.getElementById('a'+i).style.display='block'}
+</script>
 </body>
 </html>
