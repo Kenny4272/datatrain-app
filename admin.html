@@ -1,43 +1,92 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>企业管理控制台</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>企业版管理后台 · 数据实训平台</title>
 <style>
-*{margin:0;padding:0;font-family:微软雅黑}
-.top{background:#165DFF;color:#fff;padding:18px;font-size:22px}
-.menu{background:#f0f3f9;padding:12px;display:flex;gap:20px}
-.menu span{padding:6px 12px;background:#165DFF;color:#fff;border-radius:4px}
-.main{padding:20px}
-.card{border:1px solid #ddd;padding:16px;border-radius:8px;margin-bottom:15px;width:48%;float:left;margin-right:2%}
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif}
+.top-header{
+  background:#165DFF;
+  color:#fff;
+  padding:22px 16px;
+  font-size:34px;
+}
+.nav-box{
+  background:#f0f3f9;
+  padding:16px;
+  display:flex;
+  gap:14px;
+}
+.nav-btn{
+  background:#165DFF;
+  color:#fff;
+  border:none;
+  padding:12px 22px;
+  border-radius:6px;
+  font-size:18px;
+  text-decoration:none;
+}
+.content-wrap{
+  padding:20px;
+}
+.card-item{
+  border:1px solid #d9e0ec;
+  border-radius:10px;
+  padding:22px;
+  margin-bottom:16px;
+  text-decoration:none;
+  display:block;
+  color:#222;
+}
+.card-item h3{
+  font-size:26px;
+  margin-bottom:8px;
+}
+.card-item p{
+  font-size:17px;
+  color:#444;
+}
 </style>
 </head>
 <body>
-<div class="top">企业版管理后台 · 数据实训平台</div>
-<div class="menu">
-<span>企业信息配置</span>
-<span>学员批量管理</span>
-<span>订单&权限开通</span>
-<span>学习数据看板</span>
-<span>题库管理导入</span>
+<div class="top-header">企业版管理后台 · 数据实训平台</div>
+
+<!-- 顶部导航按钮（锚点跳转下方对应模块） -->
+<div class="nav-box">
+  <a href="#info" class="nav-btn">企业信息配置</a>
+  <a href="#user" class="nav-btn">学员批量管理</a>
+  <a href="#order" class="nav-btn">订单&权限开通</a>
+  <a href="#data" class="nav-btn">学习数据看板</a>
+  <a href="#question" class="nav-btn">题库管理导入</a>
 </div>
-<div class="main">
-<div class="card">
-<h3>学员管理</h3>
-<p>Excel批量导入账号、开通有效期、分组部门</p>
+
+<div class="content-wrap">
+  <!-- 学员管理卡片 -->
+  <a id="user" href="#user" class="card-item">
+    <h3>学员管理</h3>
+    <p>Excel批量导入账号、开通有效期、分组部门</p>
+  </a>
+  <!-- 订单管理卡片 -->
+  <a id="order" href="#order" class="card-item">
+    <h3>订单管理</h3>
+    <p>微信收款订单记录、手动/自动开通会员权限</p>
+  </a>
+  <!-- 学习报表卡片 -->
+  <a id="data" href="#data" class="card-item">
+    <h3>学习报表</h3>
+    <p>完成率、错题统计、部门技能排行导出</p>
+  </a>
+  <!-- 题库配置卡片 -->
+  <a id="question" href="#question" class="card-item">
+    <h3>题库配置</h3>
+    <p>JSON一键导入新增行业题目包</p>
+  </a>
 </div>
-<div class="card">
-<h3>订单管理</h3>
-<p>微信收款订单记录、手动/自动开通会员权限</p>
-</div>
-<div class="card">
-<h3>学习报表</h3>
-<p>完成率、错题统计、部门技能排行导出</p>
-</div>
-<div class="card">
-<h3>题库配置</h3>
-<p>JSON一键导入新增行业题目包</p>
-</div>
+
+<!-- 返回首页链接 -->
+<div style="padding:15px;">
+  <a href="index.html" class="nav-btn">返回用户实训首页</a>
 </div>
 </body>
 </html>
