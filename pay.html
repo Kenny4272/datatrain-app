@@ -21,7 +21,7 @@
 </head>
 <body>
 
-<div class="top">开通会员 · 解锁全部题库</div>
+<div class="top">开通会员 · 自有企业数据离线ETL实训+全题库</div>
 
 <div class="nav-bar">
   <a href="home.html">返回刷题</a>
@@ -30,87 +30,75 @@
   <a href="index.html">登录页</a>
 </div>
 
-<!-- 会员状态提示 -->
 <div style="text-align:center;margin:20px 0;font-size:20px;color:#165DFF" id="vipTip"></div>
 
 <div class="content">
   <div class="card">
-    <h3>月度会员</h3>
+    <h3>月度会员｜职场体验版</h3
     <div class="price">¥29 / 30天</div>
     <div class="info">
-      <p><span>✅</span> 解锁全部100题</p>
-      <p><span>✅</span> 查看全部答案解析</p>
-      <p><span>✅</span> 分类刷题无限制</p>
+      <p><span>✅</span>解锁全量100道实战题库答案</p>
+      <p><span>✅</span>自有脱敏企业数据全链路ETL（单文件≤10万行）</p>
+      <p><span>✅</span>清洗→SQL→Python→正则四项功能全开</p>
     </div>
     <button class="buy-btn" onclick="buy('月度会员 ¥29/30天')">立即开通</button>
   </div>
 
   <div class="card">
-    <h3>年度会员（推荐）</h3>
+    <h3>年度会员｜职场主力版（主推）</h3>
     <div class="price">¥69 / 365天</div>
     <div class="info">
-      <p><span>✅</span> 全年免费更新题目</p>
-      <p><span>✅</span> 完整答案+解析</p>
-      <p><span>✅</span> 性价比最高</p>
+      <p><span>✅</span>全年题库持续更新、答案永久查看</p>
+      <p><span>✅</span>无上限自有企业脱敏数据离线ETL实操</p>
+      <p><span>✅</span>每月新增企业真实场景案例数据集</p>
     </div>
     <button class="buy-btn" onclick="buy('年度会员 ¥69/365天')">立即开通</button>
   </div>
 
   <div class="card">
-    <h3>终身会员</h3>
+    <h3>终身会员｜企业自用版</h3>
     <div class="price">¥129 / 永久</div>
     <div class="info">
-      <p><span>✅</span> 终身使用权限</p>
-      <p><span>✅</span> 永久免费更新</p>
-      <p><span>✅</span> 后续新增题目全免费</p>
+      <p><span>✅</span>永久全题库权限、后续所有题目免费</p>
+      <p><span>✅</span>永久不限量企业自有数据离线ETL训练</p>
+      <p><span>✅</span>终身免费领取行业ERP/电商脱敏案例数据包</p>
     </div>
     <button class="buy-btn" onclick="buy('终身会员 ¥129永久')">立即开通</button>
   </div>
 </div>
 
-<div class="tip">提示：开通后自动解锁全量答案，免费用户仅每科目前5题可查看答案</div>
+<div class="tip">免费限制：免费用户仅20题看答案，自有数据仅支持100行以内基础清洗，全链路ETL需开通会员</div>
 
 <script>
-// 页面加载初始化会员状态
 let isVip = localStorage.getItem('isVip')==='1';
 let orderList = JSON.parse(localStorage.getItem('order')||'[]');
 
-// 会员中心：刷新会员状态
 function refreshVipInfo(){
   isVip = localStorage.getItem('isVip')==='1';
   renderVipTip();
   alert('已刷新会员状态！');
 }
 
-// 渲染顶部会员提示
 function renderVipTip(){
   let tipDom = document.getElementById('vipTip');
   if(isVip){
-    tipDom.innerText = '🎉 您已是付费会员，全题库答案已解锁';
+    tipDom.innerText = '🎉 付费会员：全题库+自有数据ETL全功能已解锁';
   }else{
-    tipDom.innerText = '🔓 当前为免费用户，仅20题可查看答案，开通会员解锁剩余80题';
+    tipDom.innerText = '🔓 免费用户：仅20题可用，自有数据仅小文件基础清洗，全链路ETL需开通会员';
   }
 }
 
-// 下单逻辑：生成订单存入后台、开通VIP
 function buy(productName){
-  let sure = confirm(`确认下单：${productName}？\n【模拟支付】确定即开通会员、订单自动存入管理后台`);
+  let sure = confirm(`确认下单：${productName}？\n开通后解锁自有企业数据离线ETL全流程功能，订单自动同步至管理后台`);
   if(!sure) return;
-  // 生成订单
-  let newOrder = {
-    name:productName,
-    time:new Date().toLocaleString()
-  }
+  let newOrder = {name:productName,time:new Date().toLocaleString()}
   orderList.push(newOrder);
   localStorage.setItem('order',JSON.stringify(orderList));
-  // 标记VIP
   localStorage.setItem('isVip','1');
   isVip=true;
   renderVipTip();
-  alert('✅ 开通成功！订单已存入管理员后台订单列表，返回刷题页查看全部答案');
+  alert('✅ 开通成功！返回首页即可进入【自有数据ETL】实训入口');
 }
-
-// 初始化渲染
 renderVipTip();
 </script>
 </body>
